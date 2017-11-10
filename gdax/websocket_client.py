@@ -131,6 +131,21 @@ class WebsocketClient(object):
             print("\n-- Socket Closed --")
 
     def on_message(self, msg):
+
+        #Quick hacky way to fix the types so we can do some real analytics on the data
+        try:
+            msg["price"] = float(msg["price"])
+        except KeyError:
+            pass
+        try:
+            msg["remaining_size"] = float(msg["remaining_size"])
+        except KeyError:
+            pass
+        try:
+            msg["size"] = float(msg["size"])
+        except KeyError:
+            pass
+
         if self.should_print:
             print(msg)
         if self.mongo_collection: # dump JSON to given mongo collection
